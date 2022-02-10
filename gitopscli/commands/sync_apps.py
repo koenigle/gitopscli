@@ -87,7 +87,8 @@ def __find_apps_config_from_repo(
             found_apps_path = "config.applications"
         if "repository" not in app_config_content:
             raise GitOpsException(f"Cannot find key 'repository' in '{app_file_name}'")
-        if app_config_content["repository"] == team_config_git_repo_clone_url:
+        # The supplied URL may differ from the written one in capitalization
+        if app_config_content.get("repository", "").lower() == str(team_config_git_repo_clone_url).lower():
             logging.info("Found apps repository in %s", app_file_name)
             found_app_config_file = app_config_file
             found_app_config_file_name = app_file_name
